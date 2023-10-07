@@ -8,7 +8,7 @@ function Feed() {
     <div className='feed'>
         
         <div className='feed_header'>
-            <h2>HEELO</h2>
+            <h2>Twitter</h2>
         </div>
 
         <Tweetbox/>
