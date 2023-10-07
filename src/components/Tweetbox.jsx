@@ -1,13 +1,13 @@
 import React from 'react'
 import "./tweetbox.css"
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Avatar } from "@mui/material";
 
 function Tweetbox() {
   return (
     <div className='tweetBox'>
         <form>
             <div className='tweetbox_input'>
-                <AccountCircleIcon/>
+                <Avatar src=""/>
                 <input type='text' placeholder="What's happening"f/>
 
             </div>
