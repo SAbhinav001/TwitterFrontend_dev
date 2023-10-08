@@ -1,25 +1,45 @@
-import React from 'react'
-import "./tweetbox.css"
+import React, { useState, useEffect } from "react";
+import "./tweetbox.css";
 import { Avatar } from "@mui/material";
+import axios from "axios";
 
-function Tweetbox() {
+function Tweetbox({ setPost }) {
+  //for creating new post
+  const [text, setText] = useState("");
+
+  async function postTweet(event) {
+    event.preventDefault();
+    console.log("clicked");
+    if (text) {
+      const { data } = await axios.post("http://localhost:3019/api/v1/tweets", {
+        content: text,
+      });
+      console.log("post tweet", data?.data);
+      setPost([data?.data]);
+      setText("");
+    }
+  }
   return (
-    <div className='tweetBox'>
-        <form>
-            <div className='tweetbox_input'>
-                <Avatar src=""/>
-                <textarea id="w3review" name="w3review" rows="4" cols="50">
-At w3schools.com you will learn how to make a website. They offer free tutorials in all web development technologies.
-</textarea>
-
-            </div>
-            <div className='tweetbox_bottom'>
-            <input type='file' className='input_btn' accept="image/*" onchange="loadFile(event)"/>
-            <button className='tweetbox_input_button'>TWEET</button>
-            </div>
-        </form>
+    <div className="tweetBox">
+      <form onSubmit={postTweet}>
+        <div className="tweetbox_input">
+          <Avatar src="" />
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="write here"
+          />
         </div>
-  )
+        <div className="tweetbox_bottom">
+          <input type="file" className="input_btn" />
+          <button type="submit" className="tweetbox_input_button">
+            TWEET
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 }
 
-export default Tweetbox
+export default Tweetbox;
