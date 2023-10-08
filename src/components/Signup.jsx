@@ -5,13 +5,15 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -40,6 +42,18 @@ export default function SignUp() {
     name: "",
   });
 
+  async function fetchUser() {
+    try {
+      const { data } = await axios.post("http://localhost:3019/api/v1/signUp", {
+        email: userData.email,
+        password: userData.password,
+        name: userData.name,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -66,6 +80,13 @@ export default function SignUp() {
         ["name"]: obj.firstname + " " + obj.lastname,
       });
       console.log("data is", userData);
+      //   fetchUser();
+      setUserdata({
+        email: "",
+        password: "",
+        name: "",
+      });
+      alert("signed up");
     }
   };
 
@@ -155,7 +176,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link to="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
