@@ -42,27 +42,26 @@ export default function SignUp() {
     name: "",
   });
 
-  async function fetchUser() {
+  async function fetchUser(obj) {
     try {
       const { data } = await axios.post("http://localhost:3019/api/v1/signUp", {
-        email: userData.email,
-        password: userData.password,
-        name: userData.name,
+        email: obj.email,
+        password: obj.password,
+        name: obj.name,
       });
     } catch (error) {
       console.log(error);
     }
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     const obj = {
       email: data.get("email"),
       password: data.get("password"),
-      firstname: data.get("firstName"),
-      lastname: data.get("lastName"),
+      name: data.get("firstName") + "" + data.get("lastName"),
     };
 
     if (
@@ -73,14 +72,8 @@ export default function SignUp() {
     ) {
       alert("Please fill all fields");
     } else {
-      setUserdata({
-        ...userData,
-        ["email"]: obj.email,
-        ["password"]: obj.password,
-        ["name"]: obj.firstname + " " + obj.lastname,
-      });
       console.log("data is", userData);
-      //   fetchUser();
+      await fetchUser(obj);
       setUserdata({
         email: "",
         password: "",

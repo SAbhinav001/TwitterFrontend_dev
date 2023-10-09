@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,6 +12,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Context } from "../context/contextAPI";
 
 function Copyright(props) {
   return (
@@ -36,13 +39,41 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event) => {
+  const { setFertchedUserData } = useContext(Context);
+  const navigate = useNavigate();
+  //login handle function
+  async function fetchUser(obj) {
+    console.log("inside", obj);
+    const response = await axios
+      .post("http://localhost:3019/api/v1/login", {
+        email: obj.email,
+        password: obj.password,
+      })
+      .catch(function (error) {
+        if (error.response) {
+          console.log(error.response.data);
+          alert("wrong pasword");
+        }
+      });
+
+    if (response) {
+      console.log(" suc ", response.data);
+      setFertchedUserData(response.data);
+      alert("logged in");
+      navigate("/home");
+    }
+  }
+
+  //FORM HANDLING
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const obj = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
+
+    await fetchUser(obj);
   };
 
   return (
